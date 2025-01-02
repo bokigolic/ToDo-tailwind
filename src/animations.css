@@ -1,18 +1,23 @@
-.task-enter {
+.modal-enter {
+  transform: scale(0.9);
   opacity: 0;
-  transform: translateY(-20px) scale(0.9);
 }
-.task-enter-active {
+.modal-enter-active {
+  transform: scale(1);
   opacity: 1;
-  transform: translateY(0) scale(1);
-  transition: opacity 500ms, transform 500ms;
+  transition: transform 300ms, opacity 300ms;
 }
-.task-exit {
+.modal-exit {
+  transform: scale(1);
   opacity: 1;
-  transform: translateY(0) scale(1);
 }
-.task-exit-active {
+.modal-exit-active {
+  transform: scale(0.9);
   opacity: 0;
-  transform: translateY(20px) scale(0.9);
-  transition: opacity 500ms, transform 500ms;
+  transition: transform 300ms, opacity 300ms;
+}
+
+.card-hover:hover {
+  transform: scale(1.05);
+  transition: transform 300ms;
 }
