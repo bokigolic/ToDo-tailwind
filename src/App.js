@@ -21,11 +21,11 @@ function App() {
           <nav className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold">ToDo App</h1>
             <div className="flex gap-4">
-              <Link to="/tasks" className="hover:text-blue-400 transition">
+              <Link to="/tasks" className="nav-link">
                 Tasks
               </Link>
-              <Link to="/passwords" className="hover:text-blue-400 transition">
-                Password Manager
+              <Link to="/passwords" className="nav-link">
+                Passwords
               </Link>
               <button
                 onClick={() => setIsAuthenticated(false)}

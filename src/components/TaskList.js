@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaSpinner, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 
 function TaskList({ tasks, setTasks }) {
   const [showModal, setShowModal] = useState(false);
   const [newTask, setNewTask] = useState({ text: "", description: "", date: "", priority: "low" });
   const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, [setTasks]);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     if (newTask.text.trim() !== "") {
@@ -14,26 +27,40 @@ function TaskList({ tasks, setTasks }) {
     }
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "all") return true;
-    return task.priority === filter;
-  });
+  const filteredTasks = tasks.filter((task) =>
+    task.text.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="p-6 max-w-screen-lg mx-auto">
       <h2 className="text-4xl font-bold mb-8 text-center">Task List</h2>
 
-      <div className="flex justify-between items-center mb-4">
+      {/* Search bar, filter, and add task button */}
+      <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
+        {/* Search bar */}
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 rounded w-full sm:w-2/3 lg:w-1/2"
+        />
+
+        {/* Filter dropdown */}
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="p-2 rounded bg-white border dark:bg-gray-800 dark:text-gray-100"
+          className="p-2 rounded bg-white border dark:bg-gray-800 dark:text-gray-100 w-32"
         >
           <option value="all">All</option>
           <option value="low">Low Priority</option>
           <option value="medium">Medium Priority</option>
           <option value="high">High Priority</option>
         </select>
+      </div>
+
+      {/* Add Task button */}
+      <div className="mb-4 text-center">
         <button
           onClick={() => setShowModal(true)}
           className="bg-green-500 text-white px-6 py-3 rounded-lg hover:scale-105 transform transition"
@@ -42,19 +69,20 @@ function TaskList({ tasks, setTasks }) {
         </button>
       </div>
 
+      {/* Task Cards */}
       {filteredTasks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {filteredTasks.map((task) => (
             <div
               key={task.id}
               className={`p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all ${task.priority === "high"
-                  ? "bg-red-500 text-white"
-                  : task.priority === "medium"
-                    ? "bg-yellow-500 text-gray-800"
-                    : "bg-green-500 text-gray-800"
+                ? "bg-red-100"
+                : task.priority === "medium"
+                  ? "bg-yellow-100"
+                  : "bg-green-100"
                 }`}
             >
-              <h3 className="text-xl font-semibold">{task.text}</h3>
+              <h3 className="text-xl font-bold">{task.text}</h3>
               <p>{task.description}</p>
               <p className="text-sm mt-2">Due: {task.date || "No date"}</p>
               <div className="flex justify-between mt-4">
@@ -78,6 +106,7 @@ function TaskList({ tasks, setTasks }) {
         <p className="text-center text-gray-500">No tasks available. Add one!</p>
       )}
 
+      {/* Modal for adding a new task */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
