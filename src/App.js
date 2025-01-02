@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes, Navigate, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import Home from "./components/Home";
 import TaskList from "./components/TaskList";
 import TaskDetails from "./components/TaskDetails";
@@ -10,12 +10,12 @@ function App() {
     { id: 1, text: "Sample Task 1", description: "Description for task 1", date: "2023-12-01", priority: "low", completed: false },
     { id: 2, text: "Sample Task 2", description: "Description for task 2", date: "2023-12-05", priority: "medium", completed: false },
   ]);
-
+  const [archivedTasks, setArchivedTasks] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatRoutes: true }}>
-      <div className={`min-h-screen bg-gray-100 text-gray-800 dark:text-gray-100`}>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-100 text-gray-800 dark:text-gray-100">
         {/* Navbar */}
         {isAuthenticated && (
           <nav className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
@@ -24,6 +24,7 @@ function App() {
               <Link to="/tasks" className="nav-link">
                 Tasks
               </Link>
+
               <Link to="/passwords" className="nav-link">
                 Passwords
               </Link>
@@ -42,11 +43,28 @@ function App() {
           <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
           <Route
             path="/tasks"
-            element={isAuthenticated ? <TaskList tasks={tasks} setTasks={setTasks} /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <TaskList
+                  tasks={tasks}
+                  setTasks={setTasks}
+                  archivedTasks={archivedTasks}
+                  setArchivedTasks={setArchivedTasks}
+                />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/tasks/:id"
-            element={isAuthenticated ? <TaskDetails tasks={tasks} setTasks={setTasks} /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <TaskDetails tasks={tasks} setTasks={setTasks} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/passwords"

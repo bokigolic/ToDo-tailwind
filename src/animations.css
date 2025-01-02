@@ -54,3 +54,22 @@
 .spin-animation {
   animation: spin 2s linear infinite; /* Rotacija traje 2 sekunde i ponavlja se beskonačno */
 }
+
+.modal-enter {
+  transform: scale(0.9);
+  opacity: 0;
+}
+.modal-enter-active {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 300ms, opacity 300ms;
+}
+.modal-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+.modal-exit-active {
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+}
