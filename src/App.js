@@ -1,36 +1,60 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { BrowserRouter, Route, Routes, Navigate, Link } from "react-router-dom";
 import Home from "./components/Home";
 import TaskList from "./components/TaskList";
 import TaskDetails from "./components/TaskDetails";
-import Contact from "./components/Contact";
+import PasswordManager from "./components/PasswordManager";
 
 function App() {
   const [tasks, setTasks] = useState([
-    { id: 1, text: "Call Elon", description: "Discuss Tesla updates", date: "2023-12-01", completed: false },
-    { id: 2, text: "Finish dribble", description: "Work on new designs", date: "2023-12-05", completed: false },
+    { id: 1, text: "Sample Task 1", description: "Description for task 1", date: "2023-12-01", priority: "low", completed: false },
+    { id: 2, text: "Sample Task 2", description: "Description for task 2", date: "2023-12-05", priority: "medium", completed: false },
   ]);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-600 text-white">
-        <nav className="p-4 bg-gray-800 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            <Link to="/">ToDo App</Link>
-          </h1>
-          <div className="flex gap-4">
-            <Link to="/" className="hover:underline">Home</Link>
-            <Link to="/tasks" className="hover:underline">Tasks</Link>
-          </div>
-        </nav>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatRoutes: true }}>
+      <div className={`min-h-screen bg-gray-100 text-gray-800 dark:text-gray-100`}>
+        {/* Navbar */}
+        {isAuthenticated && (
+          <nav className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
+            <h1 className="text-2xl font-bold">ToDo App</h1>
+            <div className="flex gap-4">
+              <Link to="/tasks" className="hover:text-blue-400 transition">
+                Tasks
+              </Link>
+              <Link to="/passwords" className="hover:text-blue-400 transition">
+                Password Manager
+              </Link>
+              <button
+                onClick={() => setIsAuthenticated(false)}
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
+              >
+                Logout
+              </button>
+            </div>
+          </nav>
+        )}
+
+        {/* Routes */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/tasks" element={<TaskList tasks={tasks} setTasks={setTasks} />} />
-          <Route path="/tasks/:id" element={<TaskDetails tasks={tasks} setTasks={setTasks} />} />
+          <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
+          <Route
+            path="/tasks"
+            element={isAuthenticated ? <TaskList tasks={tasks} setTasks={setTasks} /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/tasks/:id"
+            element={isAuthenticated ? <TaskDetails tasks={tasks} setTasks={setTasks} /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/passwords"
+            element={isAuthenticated ? <PasswordManager /> : <Navigate to="/" />}
+          />
         </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

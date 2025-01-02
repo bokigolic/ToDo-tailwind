@@ -23,12 +23,20 @@ function TaskDetails({ tasks, setTasks }) {
         <h3 className="text-2xl font-bold">{task.text}</h3>
         <p>{task.description}</p>
         <p className="text-gray-600">Due date: {task.date || "No date specified"}</p>
-        <button
-          onClick={deleteTask}
-          className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
-        >
-          Delete Task
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={deleteTask}
+            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
+          >
+            Delete Task
+          </button>
+          <button
+            onClick={() => navigate("/tasks")}
+            className="bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded text-white"
+          >
+            Back to List
+          </button>
+        </div>
       </div>
     </div>
   );
