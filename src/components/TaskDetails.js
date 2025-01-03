@@ -1,45 +1,51 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
-function TaskDetails({ tasks, setTasks }) {
-  const { id } = useParams();
-  const navigate = useNavigate();
+function TaskList({ tasks, setTasks }) {
+  const [newTask, setNewTask] = useState("");
 
-  const task = tasks.find((t) => t.id === parseInt(id));
-
-  const deleteTask = () => {
-    setTasks(tasks.filter((t) => t.id !== task.id));
-    navigate("/tasks");
+  const addTask = () => {
+    if (newTask.trim()) {
+      const newId = tasks.length ? tasks[tasks.length - 1].id + 1 : 1;
+      setTasks([...tasks, { id: newId, text: newTask }]);
+      setNewTask("");
+    }
   };
 
-  if (!task) {
-    return <p className="text-center text-red-500">Task not found!</p>;
-  }
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
 
   return (
-    <div className="p-6 max-w-screen-md mx-auto">
-      <h2 className="text-3xl font-bold mb-6">Task Details</h2>
-      <div className="space-y-4">
-        <h3 className="text-2xl font-bold">{task.text}</h3>
-        <p>{task.description}</p>
-        <p className="text-gray-600">Due date: {task.date || "No date specified"}</p>
-        <div className="flex gap-4">
-          <button
-            onClick={deleteTask}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
-          >
-            Delete Task
-          </button>
-          <button
-            onClick={() => navigate("/tasks")}
-            className="bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded text-white"
-          >
-            Back to List
-          </button>
+    <div className="p-6 max-w-screen-lg mx-auto">
+      <h2 className="text-4xl font-bold mb-8 text-center">Task List</h2>
+
+      <input
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+        placeholder="Enter new task..."
+        className="border p-2 rounded w-full"
+      />
+      <button onClick={addTask} className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 mt-4">
+        Add Task
+      </button>
+
+      {tasks.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+          {tasks.map((task) => (
+            <div key={task.id} className="p-6 rounded-xl shadow-lg bg-gray-100">
+              <h3 className="text-xl font-bold">{task.text}</h3>
+              <button onClick={() => deleteTask(task.id)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                Delete
+              </button>
+            </div>
+          ))}
         </div>
-      </div>
+      ) : (
+        <p className="text-center text-gray-500 mt-4">No tasks available.</p>
+      )}
     </div>
   );
 }
 
-export default TaskDetails;
+export default TaskList;
