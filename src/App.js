@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import TaskList from "./components/TaskList";
 import TaskDetails from "./components/TaskDetails";
 import PasswordManager from "./components/PasswordManager";
+import Login from "./components/Login"; // Import Login komponente
 
 function App() {
   const [tasks, setTasks] = useState([
