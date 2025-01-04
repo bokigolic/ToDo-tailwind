@@ -10,6 +10,7 @@ function TaskList({ tasks, setTasks }) {
     date: "",
     priority: "low",
     category: "General",
+    file: null,
   });
   const [categories, setCategories] = useState(["Work", "Personal", "Shopping", "General"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -36,7 +37,7 @@ function TaskList({ tasks, setTasks }) {
     }
 
     setShowModal(false);
-    setNewTask({ id: null, text: "", description: "", date: "", priority: "low", category: "General" });
+    setNewTask({ id: null, text: "", description: "", date: "", priority: "low", category: "General", file: null });
   };
 
   const handleDeleteTask = (id) => {
@@ -60,7 +61,7 @@ function TaskList({ tasks, setTasks }) {
   return (
     <div className="p-6 max-w-screen-lg mx-auto">
       <h2 className="text-5xl font-extrabold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
-        My Modern Task List
+        Task List
       </h2>
 
       {/* Search, Category Filter, and Add Task */}
@@ -123,6 +124,19 @@ function TaskList({ tasks, setTasks }) {
               </span>
             </div>
             <p className="text-gray-700 italic mb-4">{task.description}</p>
+            {task.file && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-500">Attached File:</p>
+                <a
+                  href={URL.createObjectURL(task.file)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  View File
+                </a>
+              </div>
+            )}
             <div className="flex justify-between items-center text-sm text-gray-600">
               <span className="font-medium">Due: {task.date || "No date"}</span>
               <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full shadow">
@@ -201,6 +215,11 @@ function TaskList({ tasks, setTasks }) {
                 </option>
               ))}
             </select>
+            <input
+              type="file"
+              onChange={(e) => setNewTask({ ...newTask, file: e.target.files[0] })}
+              className="border p-3 w-full rounded-lg shadow-md mb-4"
+            />
             <button
               onClick={() => setShowModal(false)}
               className="bg-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 mr-2"
