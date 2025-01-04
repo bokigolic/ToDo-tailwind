@@ -1,6 +1,6 @@
 # ToDo Application
 
-A modern, feature-rich, and visually appealing ToDo application that allows users to manage their tasks efficiently. Built using **React**, **TailwindCSS**, and **Framer Motion**, the application is fully responsive, supports offline usage as a PWA, and is hosted live at [example.com](https://example.com).
+A modern, feature-rich, and visually appealing ToDo application that allows users to manage their tasks efficiently. Built using **React**, **TailwindCSS**, and **Framer Motion**, the application is fully responsive, supports offline usage as a PWA, and is hosted live at [ToDo app](https://secured.bojangolic.com/).
 
 ---
 
@@ -73,7 +73,7 @@ A modern, feature-rich, and visually appealing ToDo application that allows user
 
 ### Hosting
 
-- The application is live and accessible at [example.com](https://example.com).
+- The application is live and accessible at [ToDo app](https://secured.bojangolic.com/).
 
 ---
 
