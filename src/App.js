@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./components/Home";
 import TaskList from "./components/TaskList";
 import TaskDetails from "./components/TaskDetails";
@@ -8,7 +9,6 @@ import PasswordManager from "./components/PasswordManager";
 import Settings from "./components/Settings";
 import Profile from "./components/Profile";
 import Dashboard from "./components/Dashboard";
-import Footer from "./components/Footer";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -27,10 +27,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
-        {/* Navbar */}
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-
-        {/* Main Content */}
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
@@ -76,8 +73,6 @@ function App() {
             />
           </Routes>
         </div>
-
-        {/* Footer */}
         <Footer />
       </div>
     </BrowserRouter>
