@@ -32,18 +32,20 @@ function PasswordManager() {
 
   // Dodaj novi unos
   const addEntry = () => {
-    if (newEntry.organization && newEntry.email && newEntry.password) {
-      const encryptedPassword = encrypt(newEntry.password);
-      const updatedEntries = [...entries, { ...newEntry, password: encryptedPassword }];
-      setEntries(updatedEntries);
-      setNewEntry({ organization: "", email: "", password: "" });
+    if (!newEntry.organization || !newEntry.email || !newEntry.password) {
+      setError("All fields must be filled out.");
+      return;
     }
+    const encryptedPassword = encrypt(newEntry.password);
+    const updatedEntries = [...entries, { ...newEntry, password: encryptedPassword }];
+    setEntries(updatedEntries);
+    setNewEntry({ organization: "", email: "", password: "" });
+    setError("");
   };
 
   // Validacija PIN-a
   const handlePinSubmit = () => {
     const hash = CryptoJS.MD5(pin).toString();
-    console.log("Generated hash:", hash); // Log za proveru hash vrednosti
     if (hash === config.passwordManagerPinCodeHash) {
       setIsAuthenticated(true);
       setError("");
