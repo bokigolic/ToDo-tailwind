@@ -4,7 +4,8 @@ import Home from "./components/Home";
 import TaskList from "./components/TaskList";
 import TaskDetails from "./components/TaskDetails";
 import PasswordManager from "./components/PasswordManager";
-import Login from "./components/Login"; // Import Login komponente
+import Login from "./components/Login";
+import { FaRegListAlt } from 'react-icons/fa'; // Uvoz ikone za zadatke
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -20,7 +21,10 @@ function App() {
         {/* Navbar */}
         {isAuthenticated && (
           <nav className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
-            <h1 className="text-2xl font-bold">ToDo App</h1>
+            <div className="flex items-center">
+              <FaRegListAlt size={30} className="mr-2" /> {/* Ikonica za ToDo App */}
+              <h1 className="text-2xl font-bold">ToDo App</h1>
+            </div>
             <div className="flex gap-4">
               <Link to="/tasks" className="nav-link">
                 Tasks
