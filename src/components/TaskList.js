@@ -14,7 +14,10 @@ function TaskList({ tasks, setTasks }) {
   const [categories, setCategories] = useState(["Work", "Personal", "Shopping", "General"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortType, setSortType] = useState("date");
+  const [archivedTasks, setArchivedTasks] = useState([]);
 
+  // Load tasks from localStorage
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
@@ -22,28 +25,52 @@ function TaskList({ tasks, setTasks }) {
     }
   }, [setTasks]);
 
+  // Save tasks to localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   const handleAddOrEditTask = () => {
-    if (newTask.text.trim() !== "") {
-      const updatedTasks = newTask.id
-        ? tasks.map(task => (task.id === newTask.id ? newTask : task))
-        : [...tasks, { ...newTask, id: tasks.length + 1 }];
-      setTasks(updatedTasks);
-      setShowModal(false);
-      setNewTask({ id: null, text: "", description: "", date: "", priority: "low", category: "General", file: null });
-    }
+    if (newTask.text.trim() === "") return;
+    const updatedTasks = newTask.id
+      ? tasks.map((task) => (task.id === newTask.id ? newTask : task))
+      : [...tasks, { ...newTask, id: tasks.length + 1 }];
+    setTasks(updatedTasks);
+    setShowModal(false);
+    setNewTask({ id: null, text: "", description: "", date: "", priority: "low", category: "General", file: null });
   };
 
   const handleDeleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
+    setTasks(tasks.filter((task) => task.id !== id));
   };
 
-  const filteredTasks = tasks.filter(task =>
-    (task.text.toLowerCase().includes(searchTerm.toLowerCase()) || task.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedCategory === "All" || task.category === selectedCategory)
+  const handleArchiveTask = (taskId) => {
+    const taskToArchive = tasks.find((task) => task.id === taskId);
+    setArchivedTasks([...archivedTasks, taskToArchive]);
+    setTasks(tasks.filter((task) => task.id !== taskId));
+  };
+
+  const sortTasks = (tasks) => {
+    switch (sortType) {
+      case "priority":
+        return [...tasks].sort((a, b) => {
+          const priorities = { low: 1, medium: 2, high: 3 };
+          return priorities[b.priority] - priorities[a.priority];
+        });
+      case "date":
+        return [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+      default:
+        return tasks;
+    }
+  };
+
+  const filteredTasks = sortTasks(
+    tasks.filter(
+      (task) =>
+        (task.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          task.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (selectedCategory === "All" || task.category === selectedCategory)
+    )
   );
 
   return (
@@ -64,8 +91,18 @@ function TaskList({ tasks, setTasks }) {
         >
           <option value="All">All Categories</option>
           {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
+            <option key={index} value={category}>
+              {category}
+            </option>
           ))}
+        </select>
+        <select
+          value={sortType}
+          onChange={(e) => setSortType(e.target.value)}
+          className="p-2 rounded bg-white border"
+        >
+          <option value="date">Sort by Date</option>
+          <option value="priority">Sort by Priority</option>
         </select>
         <button
           onClick={() => setShowModal(true)}
@@ -76,17 +113,38 @@ function TaskList({ tasks, setTasks }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {filteredTasks.map(task => (
-          <div key={task.id} className={`p-6 rounded-xl shadow-lg bg-gray-100`}>
+        {filteredTasks.map((task) => (
+          <div key={task.id} className="p-6 rounded-xl shadow-lg bg-gray-100">
             <h3 className="text-xl font-bold">{task.text}</h3>
             <p>{task.description}</p>
-            <p className="text-sm mt-2">Due: {task.date || "No date"}, Priority: {task.priority}, Category: {task.category}</p>
+            <p className="text-sm mt-2">
+              Due: {task.date || "No date"}, Priority: {task.priority}, Category: {task.category}
+            </p>
+            <button
+              onClick={() => handleArchiveTask(task.id)}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition mt-2"
+            >
+              Archive
+            </button>
             <button
               onClick={() => handleDeleteTask(task.id)}
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition mt-2"
             >
               Delete
             </button>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-xl font-bold mt-6">Archived Tasks</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {archivedTasks.map((task) => (
+          <div key={task.id} className="p-6 rounded-xl shadow-lg bg-gray-200">
+            <h3 className="text-xl font-bold">{task.text}</h3>
+            <p>{task.description}</p>
+            <p className="text-sm mt-2">
+              Due: {task.date || "No date"}, Priority: {task.priority}, Category: {task.category}
+            </p>
           </div>
         ))}
       </div>
@@ -130,7 +188,9 @@ function TaskList({ tasks, setTasks }) {
             >
               <option value="">Select Category</option>
               {categories.map((category, index) => (
-                <option key={index} value={category}>{category}</option>
+                <option key={index} value={category}>
+                  {category}
+                </option>
               ))}
             </select>
             <button

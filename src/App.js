@@ -29,7 +29,6 @@ function App() {
               <Link to="/tasks" className="nav-link">
                 Tasks
               </Link>
-
               <Link to="/passwords" className="nav-link">
                 Passwords
               </Link>
@@ -80,4 +79,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
 export default App;
