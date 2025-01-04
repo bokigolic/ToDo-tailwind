@@ -113,10 +113,10 @@ function TaskList({ tasks, setTasks }) {
               <h3 className="text-xl font-bold text-gray-800">{task.text}</h3>
               <span
                 className={`px-3 py-1 text-sm font-semibold rounded-full shadow ${task.priority === "low"
-                    ? "bg-green-200 text-green-900"
-                    : task.priority === "medium"
-                      ? "bg-yellow-200 text-yellow-900"
-                      : "bg-red-200 text-red-900"
+                  ? "bg-green-200 text-green-900"
+                  : task.priority === "medium"
+                    ? "bg-yellow-200 text-yellow-900"
+                    : "bg-red-200 text-red-900"
                   }`}
               >
                 {task.priority.toUpperCase()}
