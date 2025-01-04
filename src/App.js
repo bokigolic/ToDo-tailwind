@@ -8,6 +8,7 @@ import PasswordManager from "./components/PasswordManager";
 import Settings from "./components/Settings";
 import Profile from "./components/Profile";
 import Dashboard from "./components/Dashboard";
+import Footer from "./components/Footer";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -25,54 +26,59 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen">
-        {/* Modern Navbar */}
+      <div className="min-h-screen flex flex-col">
+        {/* Navbar */}
         <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
 
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
-          <Route
-            path="/tasks"
-            element={
-              isAuthenticated ? (
-                <TaskList tasks={tasks} setTasks={setTasks} />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/tasks/:id"
-            element={
-              isAuthenticated ? (
-                <TaskDetails tasks={tasks} setTasks={setTasks} />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={isAuthenticated ? <Dashboard tasks={tasks} /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/passwords"
-            element={isAuthenticated ? <PasswordManager /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/settings"
-            element={
-              isAuthenticated ? <Settings setTheme={setTheme} /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              isAuthenticated ? <Profile /> : <Navigate to="/" />
-            }
-          />
-        </Routes>
+        {/* Main Content */}
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
+            <Route
+              path="/tasks"
+              element={
+                isAuthenticated ? (
+                  <TaskList tasks={tasks} setTasks={setTasks} />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/tasks/:id"
+              element={
+                isAuthenticated ? (
+                  <TaskDetails tasks={tasks} setTasks={setTasks} />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={isAuthenticated ? <Dashboard tasks={tasks} /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/passwords"
+              element={isAuthenticated ? <PasswordManager /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/settings"
+              element={
+                isAuthenticated ? <Settings setTheme={setTheme} /> : <Navigate to="/" />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                isAuthenticated ? <Profile /> : <Navigate to="/" />
+              }
+            />
+          </Routes>
+        </div>
+
+        {/* Footer */}
+        <Footer />
       </div>
     </BrowserRouter>
   );
